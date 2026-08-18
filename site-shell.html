@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RealHand ROS 2 SDK installation, integration, operation, and API reference.">
+  <meta name="theme-color" content="#4051b5">
+  <title>RealHand ROS 2 SDK Documentation</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="menu-button" id="menu-toggle" type="button" aria-label="Open navigation">☰</button>
+    <a class="brand" href="#/project-overview">
+      <span class="brand-mark">RH</span>
+      <span class="brand-name">RealHand ROS 2 SDK<span class="brand-sub">Developer Documentation</span></span>
+    </a>
+    <button class="search-trigger" id="search-trigger" type="button" aria-label="Search documentation">
+      <b>⌕</b><span>Search documentation</span><kbd>Ctrl K</kbd>
+    </button>
+    <div class="top-actions">
+      <button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle color theme">◐</button>
+    </div>
+  </header>
+
+  <aside class="sidebar" aria-label="Documentation navigation">
+    <div class="sidebar-label">Documentation</div>
+    <nav class="nav-list" id="nav-list"></nav>
+  </aside>
+  <div class="mobile-scrim" id="mobile-scrim"></div>
+
+  <div class="page-shell">
+    <main class="main doc-content" id="main-content"><div class="loading">Loading documentation…</div></main>
+  </div>
+
+  <aside class="toc" aria-label="On this page">
+    <div class="toc-title">On this page</div>
+    <nav id="toc-links"></nav>
+  </aside>
+
+  <dialog class="search-dialog" id="search-dialog">
+    <div class="search-box">
+      <input id="search-input" type="search" placeholder="Search chapters and API names…" autocomplete="off" aria-label="Search documentation">
+      <button class="search-close" id="search-close" type="button" aria-label="Close search">×</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </dialog>
+
+  <template id="document-source">
+<!-- DOCUMENT_BODY -->
+  </template>
+  <script src="assets/app.js"></script>
+</body>
+</html>
