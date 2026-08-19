@@ -41,11 +41,18 @@ body.sidebar-hidden .topbar { left: 0; }
 body.sidebar-hidden .sidebar { transform: translateX(-100%); }
 .sidebar-label { padding: 0 12px 16px; color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .nav-list { display: grid; gap: 1px; }
+.nav-group { min-width: 0; }
 .nav-link { display: flex; gap: 8px; align-items: flex-start; padding: 5px 10px; color: var(--text); text-decoration: none; font-size: 14px; line-height: 1.45; }
 .nav-link:hover { color: var(--active); text-decoration: underline; }
 .nav-link.active { color: var(--active); font-weight: 600; }
 .nav-number { min-width: 25px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .nav-link.active .nav-number { color: var(--active); }
+.nav-children { margin: 1px 0 5px 19px; padding-left: 8px; border-left: 1px solid var(--border); }
+.nav-child-link { display: flex; gap: 7px; padding: 3px 7px; color: var(--muted); text-decoration: none; font-size: 12.5px; line-height: 1.4; }
+.nav-child-link:hover { color: var(--active); text-decoration: underline; }
+.nav-child-link.active { color: var(--active); font-weight: 600; }
+.nav-child-link.level-3 { padding-left: 17px; font-size: 12px; }
+.nav-child-number { flex: 0 0 auto; min-width: 31px; color: inherit; font-variant-numeric: tabular-nums; }
 
 .page-shell { min-height: 100vh; padding-top: var(--topbar); padding-left: var(--sidebar); transition: padding-left .18s ease; }
 body.sidebar-hidden .page-shell { padding-left: 0; }

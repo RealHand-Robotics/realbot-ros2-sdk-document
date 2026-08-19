@@ -135,11 +135,44 @@ const sections = buildSections();
 main.replaceChildren(...sections.map((section) => section.article));
 
 sections.forEach((section) => {
+  const group = document.createElement('div');
+  group.className = 'nav-group';
+  group.dataset.section = section.slug;
+
   const link = document.createElement('a');
   link.className = 'nav-link';
   link.href = `#/${section.slug}`;
+  link.dataset.section = section.slug;
   link.innerHTML = `<span class="nav-number">${String(section.number).padStart(2, '0')}</span><span>${section.title}</span>`;
-  nav.append(link);
+  group.append(link);
+
+  const children = document.createElement('div');
+  children.className = 'nav-children';
+  let levelTwo = 0;
+  let levelThree = 0;
+  section.headings.filter((heading) => !heading.matches('h1')).forEach((heading) => {
+    if (heading.matches('h2')) {
+      levelTwo += 1;
+      levelThree = 0;
+    } else {
+      levelThree += 1;
+    }
+    const generatedNumber = heading.matches('h3')
+      ? `${section.number}.${levelTwo}.${levelThree}`
+      : `${section.number}.${levelTwo}`;
+    const headingText = heading.textContent.replace(/\s+/g, ' ').trim();
+    const existingNumber = headingText.match(/^(\d+(?:\.\d+)+)\.?\s+/);
+    const childNumber = existingNumber?.[1] || generatedNumber;
+    const childTitle = headingText.replace(/^\d+(?:\.\d+)+\.?\s+/, '');
+    const child = document.createElement('a');
+    child.className = heading.matches('h3') ? 'nav-child-link level-3' : 'nav-child-link level-2';
+    child.href = `#/${section.slug}/${heading.id}`;
+    child.dataset.section = section.slug;
+    child.innerHTML = `<span class="nav-child-number">${childNumber}</span><span>${childTitle}</span>`;
+    children.append(child);
+  });
+  if (children.childElementCount) group.append(children);
+  nav.append(group);
 });
 
 function addPager(section, index) {
@@ -157,10 +190,16 @@ function addPager(section, index) {
 sections.forEach(addPager);
 
 function route() {
-  const requested = location.hash.replace(/^#\//, '').split('/')[0];
+  const hashParts = decodeURIComponent(location.hash.replace(/^#\//, '')).split('/');
+  const requested = hashParts[0];
+  const requestedHeading = hashParts[1];
   const current = sections.find((section) => section.slug === requested) || sections[0];
   sections.forEach((section) => { section.article.hidden = section !== current; });
-  document.querySelectorAll('.nav-link').forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#/${current.slug}`));
+  document.querySelectorAll('.nav-link').forEach((link) => link.classList.toggle('active', link.dataset.section === current.slug));
+  document.querySelectorAll('.nav-child-link').forEach((link) => {
+    link.classList.toggle('active', link.getAttribute('href') === `#/${current.slug}/${requestedHeading}`);
+  });
+  document.querySelectorAll('.nav-group').forEach((group) => group.classList.toggle('current', group.dataset.section === current.slug));
   toc.replaceChildren();
   current.headings.filter((heading) => !heading.matches('h1')).forEach((heading) => {
     const link = document.createElement('a');
@@ -176,7 +215,11 @@ function route() {
   });
   document.title = `${current.title} · RealHand ROS 2 SDK`;
   document.body.classList.remove('nav-open');
-  window.scrollTo({ top: 0, behavior: 'instant' });
+  if (requestedHeading) {
+    requestAnimationFrame(() => document.getElementById(requestedHeading)?.scrollIntoView({ behavior: 'auto', block: 'start' }));
+  } else {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
 }
 
 function openSearch() {
