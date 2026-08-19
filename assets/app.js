@@ -219,11 +219,28 @@ document.addEventListener('keydown', (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
     event.preventDefault();
     openSearch();
+  } else if (!event.ctrlKey && !event.metaKey && !event.altKey && !/input|textarea|select/i.test(document.activeElement?.tagName)) {
+    if (event.key === '/' || event.key.toLowerCase() === 's') {
+      event.preventDefault();
+      openSearch();
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      const requested = location.hash.replace(/^#\//, '').split('/')[0];
+      const index = Math.max(0, sections.findIndex((section) => section.slug === requested));
+      const target = event.key === 'ArrowLeft' ? sections[index - 1] : sections[index + 1];
+      if (target) location.hash = `#/${target.slug}`;
+    }
   }
 });
 
-document.querySelector('#menu-toggle').addEventListener('click', () => document.body.classList.toggle('nav-open'));
+document.querySelector('#menu-toggle').addEventListener('click', () => {
+  if (window.matchMedia('(max-width: 820px)').matches) {
+    document.body.classList.toggle('nav-open');
+  } else {
+    document.body.classList.toggle('sidebar-hidden');
+  }
+});
 document.querySelector('#mobile-scrim').addEventListener('click', () => document.body.classList.remove('nav-open'));
+document.querySelector('#print-button').addEventListener('click', () => window.print());
 
 const themeButton = document.querySelector('#theme-toggle');
 const savedTheme = localStorage.getItem('realhand-docs-theme');
